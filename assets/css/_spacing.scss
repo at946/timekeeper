@@ -1,0 +1,47 @@
+@each $prop, $prop_sub in (margin: m, padding: p) {
+  @for $size from 0 through 10 {
+    $rem: $size * 0.5;
+    
+    @each $direct, $direct_sub in (top: t, bottom: b, left: l, right: r) {
+      .#{$prop_sub}#{$direct_sub}-#{$size} {
+        #{$prop}-#{$direct}: #{$rem}rem!important;
+      }
+    }
+
+    .#{$prop_sub}x-#{$size} {
+      @extend .#{$prop_sub}r-#{$size};
+      @extend .#{$prop_sub}l-#{$size};
+    }
+
+    .#{$prop_sub}y-#{$size} {
+      @extend .#{$prop_sub}t-#{$size};
+      @extend .#{$prop_sub}b-#{$size};
+    }
+
+    .#{$prop_sub}-#{$size} {
+      @extend .#{$prop_sub}x-#{$size};
+      @extend .#{$prop_sub}y-#{$size};
+    }
+  }
+
+  @each $direct, $direct_sub in (top: t, bottom: b, left: l, right: r) {
+    .#{$prop_sub}#{$direct_sub}-auto {
+      #{$prop}-#{$direct}: auto!important;
+    }
+  }
+
+  .#{$prop_sub}x-auto {
+    @extend .#{$prop_sub}l-auto;
+    @extend .#{$prop_sub}r-auto;
+  }
+
+  .#{$prop_sub}y-auto {
+    @extend .#{$prop_sub}t-auto;
+    @extend .#{$prop_sub}b-auto;
+  }
+
+  .#{$prop_sub}-auto {
+    @extend .#{$prop_sub}x-auto;
+    @extend .#{$prop_sub}y-auto;
+  }
+}

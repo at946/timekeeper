@@ -1,73 +1,160 @@
 <template>
-  <div class="container">
+  <div>
+    <div class="timer mt-10 mb-5 px-4 py-2">
+      <input  type="number"
+              v-model="minute"
+              id="minute"
+              placeholder="mm"
+              min="0"
+              max="60"
+              :readonly="timerIsRunning"
+              @change="focusOutTimer"
+      >
+      <span>:</span>
+      <input  type="number"
+              v-model="second"
+              id="second"
+              placeholder="ss"
+              min="0"
+              max="59"
+              :readonly="timerIsRunning"
+              @change="focusOutTimer"
+      >
+    </div>
     <div>
-      <Logo />
-      <h1 class="title">
-        timekeeper
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <button
+        id="button_start"
+        class="button"
+        :disabled="(Number(this.minute) * 60 + Number(this.second)) <= 0 || timerIsRunning"
+        @click="startTimer"
+      >
+        <fa :icon="faPlay" />
+      </button>
+
+      <button
+        id="button_stop"
+        class="button"
+        :disabled="!timerIsRunning"
+        @click="stopTimer"
+      >
+        <fa :icon="faPause" />
+      </button>
+      <button
+        id="button_reset"
+        class="button"
+        :disabled="originTime == 0 || originTime == time || timerIsRunning"
+        @click="resetTimer"
+      >
+        <fa :icon="faUndo" />
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import Push from 'push.js'
+import { faPlay, faPause, faUndo } from '@fortawesome/free-solid-svg-icons'
+
+export default {
+  data() {
+    return {
+      minute: '00',
+      second: '00',
+      timer: '',
+      time: 0,
+      originTime: 0,
+      timerIsRunning: false,
+      timerIsSet: false
+    }
+  },
+
+  head() {
+    return {
+      title: `${this.minute}:${this.second} | timekeeper`
+    }
+  },
+
+  mounted() {
+    Push.Permission.request()
+  },
+
+  computed: {
+    faPlay()  { return faPlay },
+    faPause() { return faPause },
+    faUndo()  { return faUndo }
+  },
+
+  methods: {
+    focusOutTimer () {
+      this.time = Number(this.minute) * 60 + Number(this.second)
+      this.timeToMinSec()
+      this.timerIsSet = true
+    },
+
+    timeToMinSec () {
+      if (this.time < 3600) {
+        this.second = ('00' + this.time % 60).slice(-2)
+        this.minute = ('00' + (this.time - this.second) / 60).slice(-2)
+      } else {
+        this.minute = '60'
+        this.second = '00'
+      }
+    },
+
+    startTimer () {
+      if  (this.timerIsSet) { this.originTime = this.time }
+      // 1秒ごとにカウントダウンする
+      this.timer = setInterval(() => {
+        this.time -= 1
+        this.timeToMinSec()
+        if (this.time < 1) {
+          this.stopTimer()
+          Push.create('Time is up!!', {
+            onClick: function () {
+              window.focus()
+              this.close()
+            }
+          })
+        }
+      }, 1000)
+      // タイマー動作中のステータスに更新する
+      this.timerIsRunning = true
+      this.timerIsSet = false
+    },
+
+    stopTimer () {
+      // カウントダウンを停止する
+      clearInterval(this.timer)
+      // タイマーを停止中のステータスに更新する
+      this.timerIsRunning = false
+    },
+
+    resetTimer () {
+      this.time = this.originTime
+      this.timeToMinSec()
+    }
+  }
+}
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+<style lang="scss" scoped>
+h1 {
+  font-size: 5rem;
 }
 
-.title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
+.timer {
+  @media screen and (max-width: 416px) { font-size: 3rem; }
+  @media screen and (min-width: 417px) { font-size: 5rem; }
+  display: inline-block;
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+  input {
+    @media screen and (max-width: 416px) { width: 80px; }
+    @media screen and (min-width: 417px) { width: 120px; }
+    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      -moz-appearance: textfield;
+    }
+  }
 }
 </style>

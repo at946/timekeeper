@@ -1,4 +1,4 @@
-const baseUrl = process.env.BASE_URL || 'http://localhost:3000/'
+const baseUrl = 'https://at946.github.io/timekeeper/'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -59,12 +59,7 @@ export default {
     '@nuxtjs/google-analytics'
   ],
   googleAnalytics: {
-    id: process.env.GOOGLE_ANALYTICS_ID
-  },
-  publicRuntimeConfig: {
-    googleAnalytics: {
-      id: process.env.GOOGLE_ANALYTICS_ID
-    }
+    id: 'UA-195033880-2'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

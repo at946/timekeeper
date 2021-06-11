@@ -5,9 +5,6 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'timekeeper',
-    router: {
-      base: '/timekeeper/'
-    },
     htmlAttrs: {
       lang: 'jp'
     },
@@ -19,6 +16,14 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
+  },
+
+  router: {
+    base: '/timekeeper/'
+  },
+
+  generate: {
+    dir: 'docs'
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

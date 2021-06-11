@@ -20,7 +20,7 @@ export default {
   methods: {
     shareToTwitter() {
       window.open(
-        `https://twitter.com/intent/tweet?text=${encodeURIComponent('timekeeper #timekeeper')}&url=${encodeURIComponent(window.location.origin)}`,
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent('timekeeper #timekeeper')}&url=${encodeURIComponent(window.location.href)}`,
         "_blank"
       )
     }

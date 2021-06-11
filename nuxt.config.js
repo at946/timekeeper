@@ -23,7 +23,7 @@ export default {
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/timekeeper/favicon.ico' }
     ]
   },
 

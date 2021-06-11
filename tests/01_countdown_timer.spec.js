@@ -1,5 +1,5 @@
 describe('カウントダウンタイマー', () => {
-  const rootUrl = "http://localhost:3000/"
+  const rootUrl = "http://localhost:3000/timekeeper/"
 
   const clearInput = async (id) => {
     const el = await page.$(id)

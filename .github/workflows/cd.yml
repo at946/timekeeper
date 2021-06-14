@@ -22,7 +22,7 @@ jobs:
       
       - name: Install dependencies
         run: yarn
-
+      
       - name: Generate
         env:  
           BASE_URL: ${{ secrets.BASE_URL }}

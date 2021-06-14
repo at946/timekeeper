@@ -55,7 +55,7 @@ export default {
     '@nuxtjs/google-analytics'
   ],
   googleAnalytics: {
-    id: GOOGLE_ANALYTICS_ID
+    id: process.env.GOOGLE_ANALYTICS_ID
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

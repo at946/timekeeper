@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="timer mt-10 mb-5 px-4 py-2">
+    <div class="timer mt-10 mb-2 px-4 py-2">
       <input  type="number"
               v-model="minute"
               id="minute"
               placeholder="mm"
               min="0"
               max="60"
-              :readonly="timerIsRunning"
+              :readonly="timerIsRunning || timerType == 'countup'"
               @change="focusOutTimer"
       >
       <span>:</span>
@@ -17,15 +17,27 @@
               placeholder="ss"
               min="0"
               max="59"
-              :readonly="timerIsRunning"
+              :readonly="timerIsRunning || timerType == 'countup'"
               @change="focusOutTimer"
       >
+    </div>
+    <div class="mb-2">
+      <select
+        name="timer_type"
+        id="timer_type"
+        v-model="timerType"
+        @change="clearTimer"
+        :disabled="timerIsRunning"
+      >
+        <option value="countdown">カウントダウン</option>
+        <option value="countup">カウントアップ</option>
+      </select>
     </div>
     <div>
       <button
         id="button_start"
         class="button"
-        :disabled="(Number(this.minute) * 60 + Number(this.second)) <= 0 || timerIsRunning"
+        :disabled="(timerType == 'countdown' && (Number(this.minute) * 60 + Number(this.second)) <= 0) || timerIsRunning"
         @click="startTimer"
       >
         <fa :icon="faPlay" />
@@ -42,7 +54,7 @@
       <button
         id="button_reset"
         class="button"
-        :disabled="originTime == 0 || originTime == time || timerIsRunning"
+        :disabled="(timerType == 'countdown' && (originTime == 0 || originTime == time)) || (timerType == 'countup' && time == 0) || timerIsRunning"
         @click="resetTimer"
       >
         <fa :icon="faUndo" />
@@ -64,7 +76,8 @@ export default {
       time: 0,
       originTime: 0,
       timerIsRunning: false,
-      timerIsSet: false
+      timerIsSet: false,
+      timerType: 'countdown'
     }
   },
 
@@ -102,21 +115,29 @@ export default {
     },
 
     startTimer () {
-      if  (this.timerIsSet) { this.originTime = this.time }
-      // 1秒ごとにカウントダウンする
-      this.timer = setInterval(() => {
-        this.time -= 1
-        this.timeToMinSec()
-        if (this.time < 1) {
-          this.stopTimer()
-          Push.create('Time is up!!', {
-            onClick: function () {
-              window.focus()
-              this.close()
-            }
-          })
-        }
-      }, 1000)
+      if (this.timerIsSet) { this.originTime = this.time }
+      if (this.timerType == 'countdown') {
+        // 1秒ごとにカウントダウンする
+        this.timer = setInterval(() => {
+          this.time -= 1
+          this.timeToMinSec()
+          if (this.time < 1) {
+            this.stopTimer()
+            Push.create('Time is up!!', {
+              onClick: function () {
+                window.focus()
+                this.close()
+              }
+            })
+          }
+        }, 1000)
+      } else if (this.timerType == 'countup') {
+        // 1秒ごとにカウントアップする
+        this.timer = setInterval(() => {
+          this.time++
+          this.timeToMinSec()
+        }, 1000)
+      }
       // タイマー動作中のステータスに更新する
       this.timerIsRunning = true
       this.timerIsSet = false
@@ -130,7 +151,13 @@ export default {
     },
 
     resetTimer () {
-      this.time = this.originTime
+      if (this.timerType == 'countdown') { this.time = this.originTime }
+      else if (this.timerType == 'countup') { this.time = 0}
+      this.timeToMinSec()
+    },
+
+    clearTimer () {
+      this.time = 0
       this.timeToMinSec()
     }
   }
@@ -138,6 +165,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/css/_spacing.scss';
+@import '@/assets/css/_color.scss';
+
 h1 {
   font-size: 5rem;
 }
@@ -154,6 +184,25 @@ h1 {
       -webkit-appearance: none;
       margin: 0;
       -moz-appearance: textfield;
+    }
+  }
+}
+
+select {
+  @extend .px-3;
+  @extend .py-2;
+  border-width: 1px;
+  border-radius: 2rem;
+  border-color: darken($primary, 15%);
+
+  &:hover, &:focus {
+    background: darken($primary, 15%);
+  }
+
+  &:disabled {
+    border-color: $primary;
+    &:hover, &:focus {
+      background: $primary;
     }
   }
 }

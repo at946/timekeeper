@@ -24,6 +24,8 @@ jobs:
         run: yarn
 
       - name: Generate
+        env:
+          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
         run: yarn run generate
       
       - name: Deploy

@@ -31,10 +31,6 @@ export default {
     base: '/timekeeper/'
   },
 
-  // generate: {
-  //   dir: 'docs'
-  // },
-
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@/assets/css/destyle.css'
@@ -59,7 +55,7 @@ export default {
     '@nuxtjs/google-analytics'
   ],
   googleAnalytics: {
-    id: 'UA-195033880-2'
+    id: GOOGLE_ANALYTICS_ID
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

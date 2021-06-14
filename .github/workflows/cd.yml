@@ -23,11 +23,11 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - run: 'echo "$BASE_URL" > key'
+      - run: 'echo "$BASE_URL"'
         shell: bash
         env:
           BASE_URL: ${{secrets.BASE_URL}}    
-            
+
       # - name: Generate
       #   env:  
       #     BASE_URL: ${{ secrets.BASE_URL }}

@@ -20,11 +20,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Test environment variables
-        env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-        run: echo $BASE_URL
-      
       - name: Install dependencies
         run: yarn
       
@@ -32,7 +27,7 @@ jobs:
         env:  
           BASE_URL: ${{ secrets.BASE_URL }}
           GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
-        run: yarn run generate
+        run: yarn build && yarn generate
       
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

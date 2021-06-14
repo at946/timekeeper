@@ -29,9 +29,9 @@ jobs:
       - name: Generate
         env:  
           BASE_URL: ${{ secrets.BASE_URL }}
-          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_I }}
+          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
           GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_SITE_VERIFICATION }}
-        run: yarn generate
+        run: yarn generat
       
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

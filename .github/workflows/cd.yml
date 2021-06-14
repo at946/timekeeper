@@ -25,6 +25,7 @@ jobs:
 
       - name: Generate
         env:
+          BASE_URL: ${{ secrets.BASE_URL }}
           GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
         run: yarn run generate
       

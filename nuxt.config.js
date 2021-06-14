@@ -1,4 +1,4 @@
-const baseUrl = 'https://at946.github.io/timekeeper/'
+const baseUrl = process.env.BASE_URL || 'http://localhost:3000/'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target

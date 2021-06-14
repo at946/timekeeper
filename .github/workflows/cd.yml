@@ -23,19 +23,19 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Access to secret
+      - run: 'echo "$BASE_URL" > key'
+        shell: bash
         env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-        run: echo ${{ secrets.BASE_URL }}
+          BASE_URL: ${{secrets.BASE_URL}}    
+            
+      # - name: Generate
+      #   env:  
+      #     BASE_URL: ${{ secrets.BASE_URL }}
+      #     GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+      #   run: yarn generate
       
-      - name: Generate
-        env:  
-          BASE_URL: ${{ secrets.BASE_URL }}
-          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
-        run: yarn generate
-      
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      # - name: Deploy
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./dist

@@ -22,6 +22,12 @@ jobs:
 
       - name: Install dependencies
         run: yarn
+
+      - name: Access to secret
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: |
+　　　　　##access to $BASE_URL if this script is bash
       
       - name: Generate
         env:  

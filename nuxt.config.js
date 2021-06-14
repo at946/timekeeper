@@ -21,6 +21,7 @@ export default {
       { hid: 'og:url', property: 'og:url', content: baseUrl },
       { hid: 'og:image', property: 'og:image', content: `${baseUrl}ogp.png` },
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+      { hid: 'google-site-verification', name: 'google-site-verification', content: process.env.GOOGLE_SITE_VERIFICATION}
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/timekeeper/favicon.ico' }

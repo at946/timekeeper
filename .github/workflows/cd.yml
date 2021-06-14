@@ -19,6 +19,11 @@ jobs:
         uses: actions/setup-node@v2.1.2
         with:
           node-version: ${{ matrix.node }}
+
+      - name: Test environment variables
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: echo $BASE_URL
       
       - name: Install dependencies
         run: yarn

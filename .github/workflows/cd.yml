@@ -26,8 +26,7 @@ jobs:
       - name: Access to secret
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
-        run: |
-　　　　　##access to $BASE_URL if this script is bash
+        run: echo "$BASE_URL"
       
       - name: Generate
         env:  

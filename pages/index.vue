@@ -1,6 +1,18 @@
 <template>
   <div>
-    <div class="timer mt-10 mb-2 px-4 py-2">
+    <div class="mb-2 mt-10">
+      <select
+        name="timer_type"
+        id="timer_type"
+        v-model="timerType"
+        @change="clearTimer"
+        :disabled="timerIsRunning"
+      >
+        <option value="countdown">カウントダウン</option>
+        <option value="countup">カウントアップ</option>
+      </select>
+    </div>
+    <div class="timer mb-2 px-4 py-2">
       <input  type="number"
               v-model="minute"
               id="minute"
@@ -20,18 +32,6 @@
               :readonly="timerIsRunning || timerType == 'countup'"
               @change="focusOutTimer"
       >
-    </div>
-    <div class="mb-2">
-      <select
-        name="timer_type"
-        id="timer_type"
-        v-model="timerType"
-        @change="clearTimer"
-        :disabled="timerIsRunning"
-      >
-        <option value="countdown">カウントダウン</option>
-        <option value="countup">カウントアップ</option>
-      </select>
     </div>
     <div>
       <button
@@ -74,6 +74,8 @@ export default {
       second: '00',
       timer: '',
       time: 0,
+      endTime: 0,
+      startTime: 0,
       originTime: 0,
       timerIsRunning: false,
       timerIsSet: false,
@@ -118,8 +120,9 @@ export default {
       if (this.timerIsSet) { this.originTime = this.time }
       if (this.timerType == 'countdown') {
         // 1秒ごとにカウントダウンする
+        this.endTime = Date.now() + (this.time * 1000)
         this.timer = setInterval(() => {
-          this.time -= 1
+          this.time = Math.round((this.endTime - Date.now()) / 1000)
           this.timeToMinSec()
           if (this.time < 1) {
             this.stopTimer()
@@ -133,8 +136,9 @@ export default {
         }, 1000)
       } else if (this.timerType == 'countup') {
         // 1秒ごとにカウントアップする
+        this.startTime = Date.now() - this.time * 1000
         this.timer = setInterval(() => {
-          this.time++
+          this.time = Math.round((Date.now() - this.startTime) / 1000)
           this.timeToMinSec()
         }, 1000)
       }
@@ -190,7 +194,7 @@ h1 {
 
 select {
   @extend .px-3;
-  @extend .py-2;
+  @extend .py-1;
   border-width: 1px;
   border-radius: 2rem;
   border-color: darken($primary, 15%);

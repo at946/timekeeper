@@ -197,16 +197,15 @@ select {
   @extend .py-1;
   border-width: 1px;
   border-radius: 2rem;
-  border-color: darken($primary, 15%);
+  border-color: $primary;
 
   &:hover, &:focus {
-    background: darken($primary, 15%);
+    border-color: darken($primary, 15%);
   }
 
   &:disabled {
-    border-color: $primary;
     &:hover, &:focus {
-      background: $primary;
+      border-color: $primary;
     }
   }
 }
